@@ -9,6 +9,7 @@ type ZerologLoggerAdapter struct {
 	logger zerolog.Logger
 }
 
+// Logs an error message.
 func (loggerAdapter *ZerologLoggerAdapter) Error(msg string, err error, fields watermill.LogFields) {
 	event := loggerAdapter.logger.Err(err)
 
@@ -19,6 +20,7 @@ func (loggerAdapter *ZerologLoggerAdapter) Error(msg string, err error, fields w
 	event.Msg(msg)
 }
 
+// Logs an info message.
 func (loggerAdapter *ZerologLoggerAdapter) Info(msg string, fields watermill.LogFields) {
 	event := loggerAdapter.logger.Info()
 
@@ -29,6 +31,7 @@ func (loggerAdapter *ZerologLoggerAdapter) Info(msg string, fields watermill.Log
 	event.Msg(msg)
 }
 
+// Logs a debug message.
 func (loggerAdapter *ZerologLoggerAdapter) Debug(msg string, fields watermill.LogFields) {
 	event := loggerAdapter.logger.Debug()
 
@@ -39,6 +42,7 @@ func (loggerAdapter *ZerologLoggerAdapter) Debug(msg string, fields watermill.Lo
 	event.Msg(msg)
 }
 
+// Logs a trace.
 func (loggerAdapter *ZerologLoggerAdapter) Trace(msg string, fields watermill.LogFields) {
 	event := loggerAdapter.logger.Trace()
 
@@ -49,6 +53,7 @@ func (loggerAdapter *ZerologLoggerAdapter) Trace(msg string, fields watermill.Lo
 	event.Msg(msg)
 }
 
+// Creates new adapter wiht the input fields as context.
 func (loggerAdapter *ZerologLoggerAdapter) With(fields watermill.LogFields) watermill.LoggerAdapter {
 	if fields == nil {
 		return loggerAdapter
@@ -65,14 +70,15 @@ func (loggerAdapter *ZerologLoggerAdapter) With(fields watermill.LogFields) wate
 	}
 }
 
-func addWatermillFieldsData(event *zerolog.Event, fields watermill.LogFields) {
-	for i, v := range fields {
-		event.Interface(i, v)
-	}
-}
-
+// Gets a new zerolog adapter for use in the watermill context.
 func NewZerologLoggerAdapter(logger zerolog.Logger) *ZerologLoggerAdapter {
 	return &ZerologLoggerAdapter{
 		logger: logger,
+	}
+}
+
+func addWatermillFieldsData(event *zerolog.Event, fields watermill.LogFields) {
+	for i, v := range fields {
+		event.Interface(i, v)
 	}
 }
